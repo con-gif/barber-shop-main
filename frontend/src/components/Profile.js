@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getAuthUsername, getAuthToken } from '../utils/auth';
-import userStatus from '../features/auth/authslice';
+import { useSelector } from 'react-redux';
 
 const Profile = () => {
   const [bookings, setBookings] = useState([]);
   const [error, setError] = useState('');
+  const userStatus = useSelector((state) => state.auth.userStatus);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -45,18 +46,19 @@ const Profile = () => {
           {bookings.length === 0 ? (
             <p>No bookings found.</p>
           ) : (
-            <ul className="list-group">
-              {bookings.map((booking) => (
-                <li key={booking._id} className="list-group-item">
-                  <p>Barbershop: {booking.barbershop}</p>
-                  <p>Date: {new Date(booking.date).toLocaleDateString()}</p>
-                  <p>Time: {booking.time}</p>
-                  <p>Service: {booking.service}</p>
-                  <p>Professional: {booking.professional}</p>
-                  <p>Status: {booking.status}</p>
-                </li>
-              ))}
-            </ul>
+<ul className="list-group">
+  {bookings.map((booking) => (
+    <li key={booking._id} className="list-group-item">
+      <p>Barbershop: {booking.barbershopName}</p>
+      <p>Username: {booking.username}</p>
+      <p>Date: {new Date(booking.date).toLocaleDateString()}</p>
+      <p>Time: {booking.time}</p>
+      <p>Service: {booking.service}</p>
+      <p>Professional: {booking.professional}</p>
+      <p>Status: {booking.status}</p>
+    </li>
+  ))}
+</ul>
           )}
         </>
       )}

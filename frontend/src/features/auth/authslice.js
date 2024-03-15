@@ -5,7 +5,7 @@ export const authSlice = createSlice({
   initialState: {
     isLoggedIn: !!localStorage.getItem('token'),
     token: localStorage.getItem('token'),
-    userStatus: parseInt(localStorage.getItem('userStatus')) || 1, // Default to 1 if not found
+    userStatus: parseInt(localStorage.getItem('userStatus')) || 0, // Default to 0 if not found
   },
   reducers: {
     login: (state, action) => {
@@ -18,7 +18,7 @@ export const authSlice = createSlice({
     logout: (state) => {
       state.isLoggedIn = false;
       state.token = null;
-      state.userStatus = 1;
+      state.userStatus = 0;
       localStorage.removeItem('token');
       localStorage.removeItem('userStatus');
     },
@@ -26,5 +26,4 @@ export const authSlice = createSlice({
 });
 
 export const { login, logout } = authSlice.actions;
-
 export default authSlice.reducer;

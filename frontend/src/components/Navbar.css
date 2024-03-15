@@ -1,11 +1,17 @@
 .navbar {
-    background-color: #f8f9fa;
+    background: linear-gradient(to right, #f0f0f0, #e0f0e0);
     padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
   }
   
   .navbar-brand {
     font-weight: bold;
     font-size: 24px;
+    color: #333;
   }
   
   .nav-link {
@@ -17,12 +23,12 @@
     color: #007bff;
   }
   
-  .btn-outline-danger {
-    color: #dc3545;
-    border-color: #dc3545;
+  .btn-outline-dark {
+    color: #333;
+    border-color: #333;
   }
   
-  .btn-outline-danger:hover {
-    background-color: #dc3545;
+  .btn-outline-dark:hover {
+    background-color: #333;
     color: white;
   }

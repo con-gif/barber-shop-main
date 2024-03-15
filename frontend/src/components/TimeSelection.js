@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import BookingForm from './BookingForm';
 import { getAuthUsername } from '../utils/auth';
+import './TimeSelection.css';
 
 const TimeSelection = () => {
   const { id } = useParams();
@@ -41,9 +42,9 @@ const TimeSelection = () => {
   };
 
   return (
-    <div>
+    <div className="time-selection">
       <h2>Select a Time</h2>
-      <ul>
+      <ul className="time-slots">
         {generateTimeSlots().map((time) => (
           <li key={time}>
             <label>

@@ -23,6 +23,29 @@ const AdminBookings = () => {
     fetchBookings();
   }, []);
 
+  const handleConfirmBooking = async (bookingId) => {
+    try {
+      console.log('Confirming booking with ID:', bookingId);
+
+      const token = getAuthToken();
+      await axios.put(
+        `http://localhost:5000/api/reservations/${bookingId}/confirm`,
+        {},
+        {
+          headers: { Authorization: token },
+        }
+      );
+      // Update the bookings state after confirming
+      setBookings((prevBookings) =>
+        prevBookings.map((booking) =>
+          booking._id === bookingId ? { ...booking, status: 'confirmed' } : booking
+        )
+      );
+    } catch (error) {
+      console.error('Error confirming booking:', error);
+    }
+  };
+
   return (
     <div>
       <h2>Admin Bookings</h2>
@@ -39,6 +62,9 @@ const AdminBookings = () => {
               <p>Service: {booking.service}</p>
               <p>Professional: {booking.professional}</p>
               <p>Status: {booking.status}</p>
+              {booking.status === 'pending' && (
+                <button onClick={() => handleConfirmBooking(booking._id)}>Confirm</button>
+              )}
             </li>
           ))}
         </ul>

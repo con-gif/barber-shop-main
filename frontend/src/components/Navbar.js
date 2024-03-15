@@ -17,7 +17,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-transparent">
       <div className="container">
         <Link className="navbar-brand" to="/">Navbar</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@ const Navbar = () => {
                   </li>
                 )}
                 <li className="nav-item">
-                  <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button>
+                  <button className="btn btn-outline-light" onClick={handleLogout}>Logout</button>
                 </li>
               </>
             )}

@@ -18,9 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/user/:username', async (req, res) => {
   try {
     const { username } = req.params;
-
     const bookings = await Reservation.find({ username });
-
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
@@ -37,21 +35,16 @@ const generateReservationCode = () => {
   return code;
 };
 
-module.exports = router;
-
 // POST a new reservation
 router.post('/', async (req, res) => {
   try {
     console.log('Received reservation data:', req.body);
-
     // Generate a unique reservation code
     const reservationCode = generateReservationCode();
-
     const reservation = new Reservation({
       ...req.body,
       reservationCode,
     });
-
     await reservation.save();
     res.status(201).json(reservation);
   } catch (error) {
@@ -63,18 +56,40 @@ router.post('/', async (req, res) => {
 router.get('/admin', authMiddleware, async (req, res) => {
   try {
     const adminUsername = req.user.username;
-
-    // Find the barbershops managed by the admin
     const barbershops = await Barbershop.find({ adminUsername });
-
-    // Extract the barbershop IDs
     const barbershopIds = barbershops.map((barbershop) => barbershop._id);
-
-    // Find the bookings for the admin's managed barbershops
-    const bookings = await Reservation.find({ barbershop: { $in: barbershopIds } });
-
-    res.json(bookings);
+    const bookings = await Reservation.find({ barbershop: { $in: barbershopIds } }).populate('barbershop', 'name');
+    const bookingsWithUsername = bookings.map((booking) => ({
+      ...booking.toObject(),
+      barbershopName: booking.barbershop.name,
+      username: booking.username,
+    }));
+    res.json(bookingsWithUsername);
   } catch (error) {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+// Confirm a booking
+router.put('/:id/confirm', authMiddleware, async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('Confirming reservation with ID:', id);
+
+    const booking = await Reservation.findById(id);
+
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    console.log('Booking before update:', booking);
+
+    booking.status = 'confirmed';
+    await booking.save();
+
+    res.json(booking);
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+module.exports = router;

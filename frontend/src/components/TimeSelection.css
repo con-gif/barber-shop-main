@@ -1,0 +1,39 @@
+.time-selection {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .time-selection h2 {
+    margin-bottom: 20px;
+  }
+  
+  .time-slots {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+  
+  .time-slots li {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .time-slots label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .time-slots input[type="radio"] {
+    display: none;
+  }
+  
+  .time-slots input[type="radio"]:checked + label {
+    background-color: #007bff;
+    color: #fff;
+  }

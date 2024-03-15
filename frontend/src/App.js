@@ -13,17 +13,21 @@ import ProfessionalSelection from './components/ProfessionalSelection';
 import TimeSelection from './components/TimeSelection';
 import Logout from './components/LogOut';
 import Profile from './components/Profile';
-import { login } from './features/auth/authslice'; // Ensure this path is correct
+import { login } from './features/auth/authslice';
+import './App.css';
+
 // The app component is the main component of the app. It contains all the routes and the logo
 
 const App = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const userStatus = parseInt(localStorage.getItem('userStatus')) || 0;
     if (token) {
-      dispatch(login(token));
+      dispatch(login({ token, userStatus }));
     }
   }, [dispatch]);
+
 
   return (
     <Router>

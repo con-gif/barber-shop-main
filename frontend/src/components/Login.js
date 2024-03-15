@@ -14,25 +14,18 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { username, password });
       const token = response.data.token;
       const userStatus = response.data.userStatus;
-      
-      localStorage.setItem('token', token);
-      localStorage.setItem('userStatus', userStatus);
-      localStorage.setItem('username', username);
       dispatch(login({ token, userStatus }));
-
       console.log('Login successful');
       navigate('/');
     } catch (error) {
       console.error('Login failed:', error.response.data.error);
-      setError('Incorrect username or password. Please try again.'); // Set error message
+      setError('Incorrect username or password. Please try again.');
     }
   };
-
   // Function to clear error message when user starts typing
   const handleInputChange = () => {
     setError('');
