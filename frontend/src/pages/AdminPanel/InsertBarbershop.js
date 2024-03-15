@@ -15,7 +15,6 @@ const InsertBarbershop = () => {
         name,
         street,
         professionals: professionals.split(',').map((professional) => professional.trim()),
-        adminUsername: getAuthUsername(), // Use the username from the authenticated user
       };
 
       const token = getAuthToken();

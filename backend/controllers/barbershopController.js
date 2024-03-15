@@ -43,7 +43,7 @@ exports.createBarbershop = async (req, res) => {
       name,
       street,
       professionals,
-      adminUsername,
+      adminUsername: req.user.username, // Use the username from the authenticated user
     });
     await barbershop.save();
     res.status(201).json(barbershop);

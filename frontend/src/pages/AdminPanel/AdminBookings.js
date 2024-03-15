@@ -10,8 +10,8 @@ const AdminBookings = () => {
     const fetchBookings = async () => {
       try {
         const token = getAuthToken();
-        const response = await axios.get('http://localhost:5000/api/bookings/admin', {
-          headers: { Authorization: token },
+        const response = await axios.get('http://localhost:5000/api/reservations', {
+          headers: { Authorization: `Bearer ${token}` },
         });
         setBookings(response.data);
       } catch (error) {
@@ -32,7 +32,7 @@ const AdminBookings = () => {
         `http://localhost:5000/api/reservations/${bookingId}/confirm`,
         {},
         {
-          headers: { Authorization: token },
+          headers: { Authorization: `Bearer ${token}` }, // Ensure token is correctly formatted
         }
       );
       // Update the bookings state after confirming
@@ -56,7 +56,8 @@ const AdminBookings = () => {
         <ul>
           {bookings.map((booking) => (
             <li key={booking._id}>
-              <p>Barbershop: {booking.barbershop}</p>
+              {/* Ensure you're only rendering the name property of the barbershop object */}
+              <p>Barbershop: {booking.barbershop.name}</p>
               <p>Date: {new Date(booking.date).toLocaleDateString()}</p>
               <p>Time: {booking.time}</p>
               <p>Service: {booking.service}</p>
