@@ -2,94 +2,70 @@ const express = require('express');
 const router = express.Router();
 const Reservation = require('../models/Reservation');
 const authMiddleware = require('../middleware/auth');
-const Barbershop = require('../models/Barbershop');
 
-// GET all reservations
+// Apply authMiddleware globally to all routes in this router
+router.use(authMiddleware);
+
+// GET all reservations - secured for admin use
 router.get('/', async (req, res) => {
-  try {
+    if (![2, 3].includes(req.user.status)) {
+        return res.status(403).json({ error: 'Access denied.' });
+    }
     const reservations = await Reservation.find();
     res.json(reservations);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
 });
 
-// Get bookings by username
-router.get('/user/:username', async (req, res) => {
-  try {
-    const { username } = req.params;
-    const bookings = await Reservation.find({ username });
+// Get bookings by the authenticated user's username
+router.get('/user', async (req, res) => {
+    const bookings = await Reservation.find({ username: req.user.username });
     res.json(bookings);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
 });
 
-// Function to generate a unique reservation code
 const generateReservationCode = () => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let code = '';
-  for (let i = 0; i < 8; i++) {
-    code += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return code;
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+    for (let i = 0; i < 8; i++) {
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return code;
 };
 
-// POST a new reservation
+// POST a new reservation using the authenticated user's username
 router.post('/', async (req, res) => {
-  try {
-    console.log('Received reservation data:', req.body);
-    // Generate a unique reservation code
-    const reservationCode = generateReservationCode();
-    const reservation = new Reservation({
-      ...req.body,
-      reservationCode,
-    });
-    await reservation.save();
-    res.status(201).json(reservation);
-  } catch (error) {
-    console.error('Error creating reservation:', error);
-    res.status(400).json({ error: 'Invalid reservation data' });
-  }
-});
-
-router.get('/admin', authMiddleware, async (req, res) => {
-  try {
-    const adminUsername = req.user.username;
-    const barbershops = await Barbershop.find({ adminUsername });
-    const barbershopIds = barbershops.map((barbershop) => barbershop._id);
-    const bookings = await Reservation.find({ barbershop: { $in: barbershopIds } }).populate('barbershop', 'name');
-    const bookingsWithUsername = bookings.map((booking) => ({
-      ...booking.toObject(),
-      barbershopName: booking.barbershop.name,
-      username: booking.username,
-    }));
-    res.json(bookingsWithUsername);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// Confirm a booking
-router.put('/:id/confirm', authMiddleware, async (req, res) => {
-  try {
-    const { id } = req.params;
-    console.log('Confirming reservation with ID:', id);
-
-    const booking = await Reservation.findById(id);
-
-    if (!booking) {
-      return res.status(404).json({ error: 'Booking not found' });
+    if (!req.user) {
+        return res.status(403).json({ message: 'Authentication required' });
     }
-    console.log('Booking before update:', booking);
 
+    const reservationCode = generateReservationCode();
+    const newReservation = new Reservation({
+        barbershop: req.body.barbershop,
+        date: req.body.date,
+        time: req.body.time,
+        service: req.body.service,
+        professional: req.body.professional,
+        status: 'pending', // Default status
+        username: req.user.username, // Use the authenticated user's username
+        reservationCode,
+    });
+
+    try {
+        await newReservation.save();
+        res.status(201).json(newReservation);
+    } catch (error) {
+        console.error('Error creating reservation:', error);
+        res.status(400).json({ message: 'Failed to create reservation' });
+    }
+});
+
+// Confirm a booking by ID, secured for the user who made the booking
+router.put('/:id/confirm', async (req, res) => {
+    const booking = await Reservation.findById(req.params.id);
+    if (!booking || booking.username !== req.user.username) {
+        return res.status(403).json({ error: 'Unauthorized' });
+    }
     booking.status = 'confirmed';
     await booking.save();
-
     res.json(booking);
-  } catch (error) {
-    res.status(500).json({ error: 'Server error' });
-  }
 });
 
 module.exports = router;

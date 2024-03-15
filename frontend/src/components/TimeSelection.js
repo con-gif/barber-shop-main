@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import BookingForm from './BookingForm';
-import { getAuthUsername } from '../utils/auth';
 import './TimeSelection.css';
 
 const TimeSelection = () => {
@@ -10,13 +9,7 @@ const TimeSelection = () => {
   const selectedServices = location.state?.selectedServices || [];
   const selectedProfessional = location.state?.selectedProfessional || null;
   const [selectedTime, setSelectedTime] = useState(null);
-  const [username, setUsername] = useState('');
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const loggedInUsername = getAuthUsername();
-    setUsername(loggedInUsername);
-  }, []);
 
   const generateTimeSlots = () => {
     const timeSlots = [];
@@ -50,6 +43,7 @@ const TimeSelection = () => {
             <label>
               <input
                 type="radio"
+                name="time-slot"
                 checked={selectedTime === time}
                 onChange={() => handleTimeSelection(time)}
               />
@@ -63,7 +57,6 @@ const TimeSelection = () => {
           barbershopId={id}
           selectedServices={selectedServices}
           selectedProfessional={selectedProfessional}
-          username={username}
           selectedTime={selectedTime}
           onBookingConfirmed={handleBookingConfirmed}
         />
