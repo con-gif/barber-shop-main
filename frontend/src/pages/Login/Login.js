@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../features/auth/authslice';
-import './Login.css'; // Import the CSS file
+import { login } from '../../features/auth/authslice';
+import '../../styles/Login.css';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -26,7 +26,7 @@ const Login = () => {
       setError('Incorrect username or password. Please try again.');
     }
   };
-  // Function to clear error message when user starts typing
+
   const handleInputChange = () => {
     setError('');
   };
@@ -37,8 +37,8 @@ const Login = () => {
         <div className="card-header">Login</div>
         <div className="card-body">
           <form onSubmit={handleSubmit}>
-            <div className="image-placeholder mb-3"></div> {/* Image placeholder */}
-            {error && <div className="alert alert-danger" role="alert">{error}</div>} {/* Error message */}
+            <div className="image-placeholder mb-3"></div>
+            {error && <div className="alert alert-danger" role="alert">{error}</div>}
             <div className="mb-3">
               <label htmlFor="username" className="form-label">Username</label>
               <input
@@ -48,7 +48,7 @@ const Login = () => {
                 value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
-                  handleInputChange(); // Call handleInputChange to clear error message
+                  handleInputChange();
                 }}
               />
             </div>
@@ -61,7 +61,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  handleInputChange(); // Call handleInputChange to clear error message
+                  handleInputChange();
                 }}
               />
             </div>

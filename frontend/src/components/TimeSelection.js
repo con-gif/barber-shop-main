@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import BookingForm from './BookingForm';
-import './TimeSelection.css';
+import BookingForm from './BookingForm/BookingForm';
+import '../styles/TimeSelection.css';
 
 const TimeSelection = () => {
   const { id } = useParams();

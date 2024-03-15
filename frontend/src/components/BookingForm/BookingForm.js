@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './BookingForm.css';
-import { getAuthToken } from '../utils/auth'; // Make sure this import path is correct
+import '../../styles/BookingForm.css';
+import { getAuthToken } from '../../utils/auth';
 
 const BookingForm = ({ barbershopId, selectedServices, selectedProfessional, selectedTime, onBookingConfirmed }) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -12,7 +12,6 @@ const BookingForm = ({ barbershopId, selectedServices, selectedProfessional, sel
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!isLoggedIn) {
       alert("You must be logged in to make a booking.");
       return;
@@ -26,7 +25,6 @@ const BookingForm = ({ barbershopId, selectedServices, selectedProfessional, sel
       professional: selectedProfessional,
     };
 
-    // Correctly retrieve the token using the getAuthToken function
     const token = getAuthToken();
     if (!token) {
       console.error('No token found, please log in again');
@@ -34,19 +32,15 @@ const BookingForm = ({ barbershopId, selectedServices, selectedProfessional, sel
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/bookings', bookingData, {
+      const response = await axios.post('http://localhost:5000/api/reservations', bookingData, {
         headers: {
-          // Ensure the Authorization header is properly formatted
-          Authorization: `Bearer ${getAuthToken()}`, // Ensure the token is correctly included
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       });
-
-      // Process the successful booking creation
       const reservationCode = response.data.reservationCode;
       console.log('Booking created successfully. Reservation Code:', reservationCode);
       onBookingConfirmed(reservationCode);
     } catch (error) {
-      // Handle errors in booking creation, including unauthorized access
       console.error('Error creating booking:', error.response ? error.response.data.error : error.message);
     }
   };
@@ -61,13 +55,7 @@ const BookingForm = ({ barbershopId, selectedServices, selectedProfessional, sel
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Date:</label>
-          <DatePicker
-            selected={selectedDate}
-            onChange={(date) => setSelectedDate(date)}
-            dateFormat="dd/MM/yyyy"
-            minDate={new Date()}
-            required
-          />
+          <DatePicker selected={selectedDate} onChange={(date) => setSelectedDate(date)} dateFormat="dd/MM/yyyy" minDate={new Date()} required />
         </div>
         <button type="submit" className="btn-book">Book Now</button>
       </form>
@@ -76,4 +64,3 @@ const BookingForm = ({ barbershopId, selectedServices, selectedProfessional, sel
 };
 
 export default BookingForm;
-

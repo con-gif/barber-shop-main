@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { getAuthToken } from '../../utils/auth';
-import { getAuthUsername } from '../../utils/auth';
-
+import { getAuthToken, getAuthUsername } from '../../utils/auth';
 
 const InsertBarbershop = () => {
   const [name, setName] = useState('');
@@ -12,21 +10,21 @@ const InsertBarbershop = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const barbershopData = {
         name,
         street,
         professionals: professionals.split(',').map((professional) => professional.trim()),
-        adminUsername: getAuthUsername(), 
+        adminUsername: getAuthUsername(), // Use the username from the authenticated user
       };
-      const token = getAuthToken();
 
+      const token = getAuthToken();
       await axios.post('http://localhost:5000/api/barbershops', barbershopData, {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       });
+
       console.log('Barbershop inserted successfully');
       // Reset form fields
       setName('');

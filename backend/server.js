@@ -1,42 +1,26 @@
+// server.js
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const connectDB = require('./config/db');
 require('dotenv').config();
 
-const authRouter = require('./routes/auth');
-const barbershopsRouter = require('./routes/barbershops');
-const reservationsRouter = require('./routes/reservations');
-const usersRouter = require('./routes/users');
+const authRoutes = require('./routes/authRoutes');
+const barbershopRoutes = require('./routes/barbershopRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
 
 const app = express();
 app.use(cors());
-
-
-
-const PORT = process.env.PORT || 5000;
-
-// Middleware
 app.use(express.json());
 
-// MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((error) => console.error('Error connecting to MongoDB:', error));
-
-// Routes
-// TODO: Add routes for barbershops, reservations, users, etc.
+// Connect to MongoDB
+connectDB();
 
 // Mount routes
-app.use('/api/barbershops', barbershopsRouter);
-app.use('/api/users', usersRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/bookings', reservationsRouter);
+app.use('/api/auth', authRoutes);
+app.use('/api/barbershops', barbershopRoutes);
+app.use('/api/reservations', reservationRoutes);
 
-
-// Start the server
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

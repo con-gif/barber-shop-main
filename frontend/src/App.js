@@ -1,25 +1,24 @@
-import React, { useEffect } from 'react'; // Correctly import useEffect from react
-import { useDispatch } from 'react-redux'; // Ensure useDispatch is imported from react-redux
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Home from './components/Home';
-import BarberShopList from './components/BarberShopList';
+import Navbar from './components/Navbar/Navbar';
+import Home from './pages/Home/Home';
+import BarberShopList from './pages/BarberShopList';
 import ReservationForm from './components/ReservationForm';
-import Login from './components/Login';
-import Registration from './components/Registration';
-import BarbershopDetails from './components/BarbershopDetails';
-import Adminpanel from './components/AdminPanel/Adminpanel';
+import Login from './pages/Login/Login';
+import Registration from './pages/Registration';
+import BarbershopDetails from './pages/BarbershopDetails';
+import Adminpanel from './pages/AdminPanel/Adminpanel';
 import ProfessionalSelection from './components/ProfessionalSelection';
 import TimeSelection from './components/TimeSelection';
 import Logout from './components/LogOut';
-import Profile from './components/Profile';
+import Profile from './pages/Profile';
 import { login } from './features/auth/authslice';
 import './App.css';
 
-// The app component is the main component of the app. It contains all the routes and the logo
-
 const App = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userStatus = parseInt(localStorage.getItem('userStatus')) || 0;
@@ -27,7 +26,6 @@ const App = () => {
       dispatch(login({ token, userStatus }));
     }
   }, [dispatch]);
-
 
   return (
     <Router>
