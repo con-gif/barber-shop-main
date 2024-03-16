@@ -43,11 +43,20 @@ exports.createReservation = async (req, res) => {
 };
 
 exports.confirmReservation = async (req, res) => {
-  const booking = await Reservation.findById(req.params.id);
-  if (!booking || booking.username !== req.user.username) {
-    return res.status(403).json({ error: 'Unauthorized' });
+  try {
+    const booking = await Reservation.findById(req.params.id);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    // Check if the user is an admin to confirm the reservation
+    if (![2, 3].includes(req.user.status)) {
+      return res.status(403).json({ error: 'Unauthorized: Admin privileges required.' });
+    }
+    booking.status = 'confirmed';
+    await booking.save();
+    res.json(booking);
+  } catch (error) {
+    console.error('Error confirming reservation:', error);
+    res.status(500).json({ error: 'Server error' });
   }
-  booking.status = 'confirmed';
-  await booking.save();
-  res.json(booking);
 };
