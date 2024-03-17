@@ -15,6 +15,8 @@ import Logout from './components/LogOut';
 import Profile from './pages/Profile';
 import { login } from './features/auth/authslice';
 import './App.css';
+import DeveloperPanel from './pages/DeveloperPanel/DeveloperPanel';
+import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -40,7 +42,22 @@ const App = () => {
           <Route path="/reservation" element={<ReservationForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Registration />} />
-          <Route path="/admin/*" element={<Adminpanel />} />
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedRoute requiredStatus={2}>
+                <Adminpanel />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/developer-panel/*"
+            element={
+              <ProtectedRoute requiredStatus={3}>
+                <DeveloperPanel />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/logout" element={<Logout />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>

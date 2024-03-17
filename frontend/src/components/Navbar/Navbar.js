@@ -1,3 +1,4 @@
+// src/components/Navbar/Navbar.js
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -46,9 +47,14 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/profile">Profile</Link>
                 </li>
-                {(userStatus === 2 || userStatus === 3) && (
+                {userStatus >= 2 && (
                   <li className="nav-item">
                     <Link className="nav-link" to="/admin">Admin Menu</Link>
+                  </li>
+                )}
+                {userStatus === 3 && (
+                  <li className="nav-item">
+                    <Link className="nav-link" to="/developer-panel">Developer Panel</Link>
                   </li>
                 )}
                 <li className="nav-item">

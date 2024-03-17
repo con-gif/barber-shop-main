@@ -1,0 +1,17 @@
+/* DeveloperPanel.css */
+.developer-panel {
+    display: flex;
+  }
+  
+  .side-ribbon {
+    flex: 0 0 200px; /* Adjust width as needed */
+    background-color: #f0f0f0; /* Light grey background */
+    padding: 20px;
+    height: 100vh; /* Full height */
+  }
+  
+  .content-area {
+    flex-grow: 1;
+    padding: 20px;
+  }
+  

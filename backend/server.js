@@ -7,6 +7,7 @@ require('dotenv').config();
 const authRoutes = require('./routes/authRoutes');
 const barbershopRoutes = require('./routes/barbershopRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
+const developerRoutes = require('./routes/developerRoutes');
 
 const app = express();
 app.use(cors());
@@ -19,6 +20,7 @@ connectDB();
 app.use('/api/auth', authRoutes);
 app.use('/api/barbershops', barbershopRoutes);
 app.use('/api/reservations', reservationRoutes);
+app.use('/api/developer', developerRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
