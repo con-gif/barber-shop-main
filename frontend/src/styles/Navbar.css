@@ -1,34 +1,64 @@
 .navbar {
-  background: linear-gradient(to right, #f0f0f0, #e0f0e0);
-  padding: 10px 20px;
+  background: linear-gradient(to right, #6a82fb, #fc5c7d); /* Updated gradient colors */
+  padding: 0.5rem 1rem;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 10;
+  display: flex;
+  justify-content: center; /* Center navbar content */
+  align-items: center;
+  height: 85px; /* Fixed navbar height */
 }
 
 .navbar-brand {
   font-weight: bold;
   font-size: 24px;
-  color: #333;
+  color: white; /* Updated text color */
+}
+
+.navbar-nav {
+  padding: 0 15px;
 }
 
 .nav-link {
-  color: #333;
-  margin-right: 10px;
+  color: white; /* Updated text color */
+  margin: 0 10px; /* Adjust spacing */
+  transition: color 0.3s ease; /* Smooth color transition */
 }
 
 .nav-link:hover {
-  color: #007bff;
+  color: #f8f9fa; /* Lighter color on hover */
 }
 
-.btn-outline-dark {
-  color: #333;
-  border-color: #333;
-}
-
-.btn-outline-dark:hover {
-  background-color: #333;
+.btn-outline-light {
   color: white;
+  border-color: white; /* Adjust to match the text color */
+}
+
+.btn-outline-light:hover {
+  background-color: white;
+  color: #6a82fb; /* Change text color to match the gradient */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 20px; /* Smaller text on small screens */
+  }
+
+  .navbar-nav {
+    padding: 0 10px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .navbar {
+    padding: 0.5rem 2rem; /* More padding on large screens */
+  }
+
+  .navbar-nav {
+    padding: 0 20px;
+  }
 }

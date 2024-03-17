@@ -1,5 +1,6 @@
 // src/components/Navbar/Navbar.js
-import React from 'react';
+import React, { useEffect } from 'react'; // Add useEffect here
+import * as THREE from 'three';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../features/auth/authslice';
@@ -17,10 +18,12 @@ const Navbar = () => {
     navigate('/');
   };
 
+
+
   return (
     <nav className="navbar navbar-expand-lg navbar-transparent">
       <div className="container">
-        <Link className="navbar-brand" to="/">Navbar</Link>
+        <Link className="navbar-brand" to="/">Barbershop around your corner</Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>

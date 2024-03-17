@@ -5,6 +5,7 @@ import App from './App';
 import store from './store';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'animate.css';
 
 ReactDOM.render(
   <React.StrictMode>
