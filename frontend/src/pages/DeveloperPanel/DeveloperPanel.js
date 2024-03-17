@@ -1,40 +1,44 @@
-// Assuming this is frontend/src/pages/DeveloperPanel/DeveloperUsers.js based on the structure you're aiming for
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { getAuthToken } from '../../utils/auth';
+// src/pages/DeveloperPanel/DeveloperPanel.js
+import React from 'react';
+import { Link, Route, Routes } from 'react-router-dom';
+import DeveloperUsers from './DeveloperUsers';
+import DeveloperAdmins from './DeveloperAdmins';
+import DeveloperBarbershops from './DeveloperBarbershops';
+import '../../styles/DeveloperPanel.css';
 
-const DeveloperUsers = () => {
-    const [users, setUsers] = useState([]);
-    const [error, setError] = useState('');
-
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                const token = getAuthToken();
-                const response = await axios.get('http://localhost:5000/api/developer/users', {
-                    headers: { Authorization: `Bearer ${token}` },
-                  });
-                setUsers(response.data);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                setError('Failed to fetch users.');
-            }
-        };
-
-        fetchUsers();
-    }, []);
-
-    return (
-        <div>
-            <h2>Manage Users</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <ul>
-                {users.map(user => (
-                    <li key={user._id}>{user.username}</li>
-                ))}
-            </ul>
-        </div>
-    );
+const DeveloperPanel = () => {
+  return (
+    <div className="developer-panel">
+      <div className="side-ribbon">
+        <ul>
+          <li>
+            <Link to="/developer-panel/users">Manage Users</Link>
+          </li>
+          <li>
+            <Link to="/developer-panel/admins">Manage Admins</Link>
+          </li>
+          <li>
+            <Link to="/developer-panel/barbershops">Manage Barbershops</Link>
+          </li>
+          {/* Add more developer functions here */}
+          <li>
+            <Link to="/developer-panel/placeholder1">Placeholder Function 1</Link>
+          </li>
+          <li>
+            <Link to="/developer-panel/placeholder2">Placeholder Function 2</Link>
+          </li>
+        </ul>
+      </div>
+      <div className="content-area">
+        <Routes>
+          <Route path="/users" element={<DeveloperUsers />} />
+          <Route path="/admins" element={<DeveloperAdmins />} />
+          <Route path="/barbershops" element={<DeveloperBarbershops />} />
+          {/* Add more routes for other developer functions */}
+        </Routes>
+      </div>
+    </div>
+  );
 };
 
-export default DeveloperUsers;
+export default DeveloperPanel;
