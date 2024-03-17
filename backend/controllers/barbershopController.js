@@ -51,3 +51,15 @@ exports.createBarbershop = async (req, res) => {
     res.status(400).json({ error: 'Invalid barbershop data' });
   }
 };
+
+exports.deleteBarbershop = async (req, res) => {
+  try {
+    const barbershop = await Barbershop.findByIdAndDelete(req.params.id);
+    if (!barbershop) {
+      return res.status(404).json({ message: 'Barbershop not found' });
+    }
+    res.status(200).json({ message: 'Barbershop deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+};
