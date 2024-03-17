@@ -13,6 +13,7 @@ exports.registerUser = async (req, res) => {
     const newUser = new User({
       username,
       password: hashedPassword,
+      isBanned: false, // Explicitly set isBanned to false upon registration
     });
     await newUser.save();
     res.status(201).json({ message: 'User registered successfully' });
@@ -21,6 +22,7 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+
 exports.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -28,6 +30,12 @@ exports.loginUser = async (req, res) => {
     if (!user) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
+
+    // Check if the user is banned
+    if (user.isBanned) {
+      return res.status(403).json({ error: 'Account is banned.' });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid username or password' });
